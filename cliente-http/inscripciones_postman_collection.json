@@ -1,0 +1,358 @@
+{
+  "info": {
+    "name": "API de Inscripciones",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Inscribir e1 en IS2 (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 201\", function () { pm.response.to_have.status(201); });",
+              "pm.test(\"estado ACTIVA\", function () { pm.expect(pm.response.json().estado).to.eql(\"ACTIVA\"); });",
+              "pm.collectionVariables.set(\"inscripcion_id\", pm.response.json().id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/inscripciones",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "inscripciones"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estudiante_id\": \"e1\",\n  \"curso_codigo\": \"IS2\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "2. Inscribir e1 en IS2 otra vez (409 DUPLICADA)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409\", function () { pm.response.to_have.status(409); });",
+              "pm.test(\"detail = DUPLICADA\", function () { pm.expect(pm.response.json().detail).to.eql(\"DUPLICADA\"); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/inscripciones",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "inscripciones"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estudiante_id\": \"e1\",\n  \"curso_codigo\": \"IS2\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "3. Inscribir e4 en IS2 (409 PRERREQUISITOS_PENDIENTES)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409\", function () { pm.response.to_have.status(409); });",
+              "pm.test(\"detail = PRERREQUISITOS_PENDIENTES\", function () { pm.expect(pm.response.json().detail).to.eql(\"PRERREQUISITOS_PENDIENTES\"); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/inscripciones",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "inscripciones"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estudiante_id\": \"e4\",\n  \"curso_codigo\": \"IS2\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "4. Inscribir e2 en IS2 (201)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 201\", function () { pm.response.to_have.status(201); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/inscripciones",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "inscripciones"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estudiante_id\": \"e2\",\n  \"curso_codigo\": \"IS2\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "5. Inscribir e3 en IS2 (409 SIN_CUPO)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 409\", function () { pm.response.to_have.status(409); });",
+              "pm.test(\"detail = SIN_CUPO\", function () { pm.expect(pm.response.json().detail).to.eql(\"SIN_CUPO\"); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/inscripciones",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "inscripciones"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estudiante_id\": \"e3\",\n  \"curso_codigo\": \"IS2\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "6. Consultar inscripcion (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", function () { pm.response.to_have.status(200); });",
+              "pm.test(\"id coincide\", function () { pm.expect(String(pm.response.json().id)).to.eql(String(pm.collectionVariables.get(\"inscripcion_id\"))); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/inscripciones/{{inscripcion_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "inscripciones",
+            "{{inscripcion_id}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "7. Inscripciones de e1 (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", function () { pm.response.to_have.status(200); });",
+              "pm.test(\"es lista no vacia\", function () { pm.expect(pm.response.json()).to.be.an(\"array\").that.is.not.empty; });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/estudiantes/e1/inscripciones",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "estudiantes",
+            "e1",
+            "inscripciones"
+          ]
+        }
+      }
+    },
+    {
+      "name": "8. Cancelar inscripcion (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", function () { pm.response.to_have.status(200); });",
+              "pm.test(\"estado CANCELADA\", function () { pm.expect(pm.response.json().estado).to.eql(\"CANCELADA\"); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/inscripciones/{{inscripcion_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "inscripciones",
+            "{{inscripcion_id}}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"estado\": \"CANCELADA\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "9. Listar cursos: IS2 con 1 cupo disponible (200)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status 200\", function () { pm.response.to_have.status(200); });",
+              "pm.test(\"IS2 tiene 1 cupo disponible\", function () { var c = pm.response.json().find(function (x) { return x.codigo === \"IS2\"; }); pm.expect(c.cupos_disponibles).to.eql(1); });"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/cursos",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "cursos"
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "inscripcion_id",
+      "value": ""
+    }
+  ]
+}
