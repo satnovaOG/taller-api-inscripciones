@@ -10,13 +10,22 @@ La fila de *Curso* ya está hecha como ejemplo.
 | Recurso     | URI de la colección | Atributos clave                        | Se relaciona con |
 |-------------|---------------------|----------------------------------------|------------------|
 | Curso       | `/cursos`           | codigo, nombre, cupos, prerrequisitos  | Inscripción      |
-| Estudiante  |                     |                                        |                  |
-| Inscripción |                     |                                        |                  |
+| Estudiante  | `/estudiantes`      | id, nombre, aprobados                  | Inscripción      |
+| Inscripción | `/inscripciones`    | id, estudiante_id, curso_codigo, estado, creada_en | Estudiante, Curso |
 
 **Pregunta:** "inscribir" es un verbo. ¿Por qué en REST lo modelamos como el
 recurso *Inscripción* y no como una URI `/inscribir`?
 
-> Respuesta:
+> Respuesta: En REST las URI identifican **cosas** (sustantivos) y el verbo
+> HTTP expresa la acción sobre ellas. "Inscribir" es en realidad el acto de
+> **crear** un recurso nuevo que antes no existía: la *Inscripción*, que
+> relaciona a un estudiante con un curso. Así `POST /inscripciones` crea la
+> inscripción y el resultado tiene identidad propia: un `id`, un `estado`
+> (ACTIVA/CANCELADA) y una fecha, por lo que luego se puede consultar
+> (`GET /inscripciones/{id}`) o cancelar (`PATCH`). Una URI `/inscribir` sería
+> una llamada a procedimiento (estilo RPC): no representa nada que se pueda
+> consultar, listar o modificar después, y obligaría a inventar más verbos
+> (`/cancelar`, `/consultar`...) en lugar de reutilizar los métodos HTTP.
 
 ## Paso 2 — Contrato: los 5 endpoints
 
