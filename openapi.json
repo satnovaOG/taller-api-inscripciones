@@ -1,0 +1,479 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "API de Inscripciones",
+    "description": "Inscripciones académicas con control de cupos, prerrequisitos y duplicados.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/cursos": {
+      "get": {
+        "tags": [
+          "Cursos"
+        ],
+        "summary": "Listar cursos con sus cupos disponibles",
+        "operationId": "listar_cursos_cursos_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Curso"
+                  },
+                  "type": "array",
+                  "title": "Response Listar Cursos Cursos Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inscripciones": {
+      "post": {
+        "tags": [
+          "Inscripciones"
+        ],
+        "summary": "Inscribir a un estudiante en un curso",
+        "operationId": "crear_inscripcion_inscripciones_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InscripcionCrear"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Inscripcion"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NO_ENCONTRADO: el estudiante o el curso no existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "DUPLICADA, PRERREQUISITOS_PENDIENTES o SIN_CUPO",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/inscripciones/{inscripcion_id}": {
+      "get": {
+        "tags": [
+          "Inscripciones"
+        ],
+        "summary": "Consultar una inscripción por su id",
+        "operationId": "obtener_inscripcion_inscripciones__inscripcion_id__get",
+        "parameters": [
+          {
+            "name": "inscripcion_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Inscripcion Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Inscripcion"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NO_ENCONTRADO: la inscripción no existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Inscripciones"
+        ],
+        "summary": "Cancelar una inscripción (ACTIVA a CANCELADA)",
+        "operationId": "cambiar_estado_inscripciones__inscripcion_id__patch",
+        "parameters": [
+          {
+            "name": "inscripcion_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Inscripcion Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CambioEstado"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Inscripcion"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NO_ENCONTRADO: la inscripción no existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "TRANSICION_INVALIDA",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/estudiantes/{estudiante_id}/inscripciones": {
+      "get": {
+        "tags": [
+          "Estudiantes"
+        ],
+        "summary": "Listar las inscripciones de un estudiante",
+        "operationId": "inscripciones_de_estudiante_estudiantes__estudiante_id__inscripciones_get",
+        "parameters": [
+          {
+            "name": "estudiante_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Estudiante Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Inscripcion"
+                  },
+                  "title": "Response Inscripciones De Estudiante Estudiantes  Estudiante Id  Inscripciones Get"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NO_ENCONTRADO: el estudiante no existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CambioEstado": {
+        "properties": {
+          "estado": {
+            "$ref": "#/components/schemas/EstadoInscripcion"
+          }
+        },
+        "type": "object",
+        "required": [
+          "estado"
+        ],
+        "title": "CambioEstado"
+      },
+      "Curso": {
+        "properties": {
+          "codigo": {
+            "type": "string",
+            "title": "Codigo",
+            "examples": [
+              "IS2"
+            ]
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre",
+            "examples": [
+              "Ingeniería de Software II"
+            ]
+          },
+          "cupos": {
+            "type": "integer",
+            "title": "Cupos",
+            "examples": [
+              2
+            ]
+          },
+          "cupos_disponibles": {
+            "type": "integer",
+            "title": "Cupos Disponibles",
+            "examples": [
+              1
+            ]
+          },
+          "prerrequisitos": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Prerrequisitos",
+            "examples": [
+              [
+                "IS1"
+              ]
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "codigo",
+          "nombre",
+          "cupos",
+          "cupos_disponibles",
+          "prerrequisitos"
+        ],
+        "title": "Curso",
+        "description": "Ejemplo ya resuelto: así se ve un curso en JSON."
+      },
+      "Error": {
+        "properties": {
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "examples": [
+              "SIN_CUPO"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "Error",
+        "description": "Cuerpo de todas las respuestas de error (ya resuelto)."
+      },
+      "EstadoInscripcion": {
+        "type": "string",
+        "enum": [
+          "ACTIVA",
+          "CANCELADA"
+        ],
+        "title": "EstadoInscripcion"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Inscripcion": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "estudiante_id": {
+            "type": "string",
+            "title": "Estudiante Id"
+          },
+          "curso_codigo": {
+            "type": "string",
+            "title": "Curso Codigo"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoInscripcion"
+          },
+          "creada_en": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Creada En"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "estudiante_id",
+          "curso_codigo",
+          "estado",
+          "creada_en"
+        ],
+        "title": "Inscripcion"
+      },
+      "InscripcionCrear": {
+        "properties": {
+          "estudiante_id": {
+            "type": "string",
+            "title": "Estudiante Id",
+            "examples": [
+              "e1"
+            ]
+          },
+          "curso_codigo": {
+            "type": "string",
+            "title": "Curso Codigo",
+            "examples": [
+              "IS2"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "estudiante_id",
+          "curso_codigo"
+        ],
+        "title": "InscripcionCrear"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

@@ -40,8 +40,8 @@ class EstadoInscripcion(str, Enum):
 
 
 class InscripcionCrear(BaseModel):
-    estudiante_id: str
-    curso_codigo: str
+    estudiante_id: str = Field(examples=["e1"])
+    curso_codigo: str = Field(examples=["IS2"])
 
 
 class Inscripcion(BaseModel):
