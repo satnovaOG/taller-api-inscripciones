@@ -35,10 +35,10 @@ Pistas: crear → `201`; no existe → `404`; choca con una regla de negocio →
 | # | Método | URI                                      | Cuerpo que recibe     | Éxito | Errores |
 |---|--------|------------------------------------------|-----------------------|-------|---------|
 | 1 | GET    | `/cursos`                                | —                     | 200   | —       |
-| 2 | POST   | `/inscripciones`                         | `InscripcionCrear`    |       |         |
-| 3 | GET    | `/inscripciones/{inscripcion_id}`        | —                     |       |         |
-| 4 | GET    | `/estudiantes/{estudiante_id}/inscripciones` | —                 |       |         |
-| 5 | PATCH  | `/inscripciones/{inscripcion_id}`        | `CambioEstado`        |       |         |
+| 2 | POST   | `/inscripciones`                         | `InscripcionCrear`    | 201   | 404 (estudiante o curso no existe); 409 (`DUPLICADA`, `PRERREQUISITOS_PENDIENTES`, `SIN_CUPO`) |
+| 3 | GET    | `/inscripciones/{inscripcion_id}`        | —                     | 200   | 404 (inscripción no existe) |
+| 4 | GET    | `/estudiantes/{estudiante_id}/inscripciones` | —                 | 200   | 404 (estudiante no existe) |
+| 5 | PATCH  | `/inscripciones/{inscripcion_id}`        | `CambioEstado`        | 200   | 404 (inscripción no existe); 409 (`TRANSICION_INVALIDA`) |
 
 ## Paso 3 — Estados de una inscripción
 

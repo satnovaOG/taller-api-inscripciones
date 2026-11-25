@@ -47,6 +47,7 @@ def listar_cursos():
 # TODO(Paso 2): decorador para  POST /inscripciones
 #               con response_model=Inscripcion y status_code=201 (se crea un recurso)
 # TODO(Paso 4): agrégale tags=["Inscripciones"], un summary y responses para 404 y 409
+@app.post("/inscripciones", response_model=Inscripcion, status_code=201)
 def crear_inscripcion(cuerpo: InscripcionCrear):
     estudiante = datos.ESTUDIANTES.get(cuerpo.estudiante_id)
     curso = datos.CURSOS.get(cuerpo.curso_codigo)
@@ -70,6 +71,7 @@ def crear_inscripcion(cuerpo: InscripcionCrear):
 # TODO(Paso 2): decorador para  GET /inscripciones/{inscripcion_id}
 #               con response_model=Inscripcion
 # TODO(Paso 4): tags, summary y responses para 404
+@app.get("/inscripciones/{inscripcion_id}", response_model=Inscripcion)
 def obtener_inscripcion(inscripcion_id: int):
     inscripcion = datos.INSCRIPCIONES.get(inscripcion_id)
     if inscripcion is None:
@@ -81,6 +83,7 @@ def obtener_inscripcion(inscripcion_id: int):
 # TODO(Paso 2): decorador para  GET /estudiantes/{estudiante_id}/inscripciones
 #               con response_model=list[Inscripcion]
 # TODO(Paso 4): tags=["Estudiantes"] y un summary
+@app.get("/estudiantes/{estudiante_id}/inscripciones", response_model=list[Inscripcion])
 def inscripciones_de_estudiante(estudiante_id: str):
     if estudiante_id not in datos.ESTUDIANTES:
         raise HTTPException(status_code=404, detail="NO_ENCONTRADO")
@@ -91,6 +94,7 @@ def inscripciones_de_estudiante(estudiante_id: str):
 # TODO(Paso 2): decorador para  PATCH /inscripciones/{inscripcion_id}
 #               con response_model=Inscripcion
 # TODO(Paso 4): tags, summary y responses para 404 y 409
+@app.patch("/inscripciones/{inscripcion_id}", response_model=Inscripcion)
 def cambiar_estado(inscripcion_id: int, cuerpo: CambioEstado):
     inscripcion = datos.INSCRIPCIONES.get(inscripcion_id)
     if inscripcion is None:
