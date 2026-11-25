@@ -50,4 +50,9 @@ Pistas: crear → `201`; no existe → `404`; choca con una regla de negocio →
 **Pregunta:** ¿Qué debe responder la API si alguien intenta cancelar una
 inscripción que ya está CANCELADA? ¿Por qué?
 
-> Respuesta:
+> Respuesta: Debe responder `409 Conflict` con `detail: "TRANSICION_INVALIDA"`.
+> La petición está bien formada y el recurso existe (no es 400 ni 404), pero
+> choca con una regla de negocio: la única transición permitida es
+> ACTIVA → CANCELADA, y CANCELADA es un estado final. Rechazarla explícitamente
+> evita ocultar errores del cliente y mantiene claro que el estado no puede
+> retroceder (reactivar una inscripción podría saltarse el control de cupos).

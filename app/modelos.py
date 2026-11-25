@@ -35,25 +35,25 @@ class Curso(BaseModel):
 
 
 class EstadoInscripcion(str, Enum):
-    # TODO(Paso 3): define los dos estados. Formato:  NOMBRE = "NOMBRE"
-    pass
+    ACTIVA = "ACTIVA"
+    CANCELADA = "CANCELADA"
 
 
 class InscripcionCrear(BaseModel):
-    # TODO(Paso 3): dos campos de tipo str: estudiante_id y curso_codigo
-    # (En el Paso 4 les agregarás un ejemplo con Field(examples=[...]))
-    pass
+    estudiante_id: str
+    curso_codigo: str
 
 
 class Inscripcion(BaseModel):
     id: int
-    # TODO(Paso 3): agrega estudiante_id (str), curso_codigo (str),
-    #               estado (EstadoInscripcion) y creada_en (datetime)
+    estudiante_id: str
+    curso_codigo: str
+    estado: EstadoInscripcion
+    creada_en: datetime
 
 
 class CambioEstado(BaseModel):
-    # TODO(Paso 3): un solo campo, estado, de tipo EstadoInscripcion
-    pass
+    estado: EstadoInscripcion
 
 
 class Error(BaseModel):

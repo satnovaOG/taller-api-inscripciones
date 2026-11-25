@@ -54,14 +54,17 @@ def crear_inscripcion(cuerpo: InscripcionCrear):
     if estudiante is None or curso is None:
         raise HTTPException(status_code=404, detail="NO_ENCONTRADO")
 
-    # TODO(Paso 3) Regla 1 - DUPLICADA
-    #   Si datos.buscar_activa(estudiante_id, curso_codigo) encuentra algo -> 409 "DUPLICADA"
+    # Regla 1 - DUPLICADA
+    if datos.buscar_activa(cuerpo.estudiante_id, cuerpo.curso_codigo) is not None:
+        raise HTTPException(status_code=409, detail="DUPLICADA")
 
-    # TODO(Paso 3) Regla 2 - PRERREQUISITOS_PENDIENTES
-    #   Si algún código de curso["prerrequisitos"] NO está en estudiante["aprobados"] -> 409
+    # Regla 2 - PRERREQUISITOS_PENDIENTES
+    if any(p not in estudiante["aprobados"] for p in curso["prerrequisitos"]):
+        raise HTTPException(status_code=409, detail="PRERREQUISITOS_PENDIENTES")
 
-    # TODO(Paso 3) Regla 3 - SIN_CUPO
-    #   Si len(datos.activas_del_curso(codigo)) >= curso["cupos"] -> 409 "SIN_CUPO"
+    # Regla 3 - SIN_CUPO
+    if len(datos.activas_del_curso(cuerpo.curso_codigo)) >= curso["cupos"]:
+        raise HTTPException(status_code=409, detail="SIN_CUPO")
 
     return datos.guardar_inscripcion(cuerpo.estudiante_id, cuerpo.curso_codigo,
                                      EstadoInscripcion.ACTIVA.value)
@@ -100,8 +103,10 @@ def cambiar_estado(inscripcion_id: int, cuerpo: CambioEstado):
     if inscripcion is None:
         raise HTTPException(status_code=404, detail="NO_ENCONTRADO")
 
-    # TODO(Paso 3) Única transición válida:  ACTIVA --> CANCELADA
-    #   Si la inscripción NO está "ACTIVA" o cuerpo.estado NO es CANCELADA
-    #     -> 409 "TRANSICION_INVALIDA"
-    #   Si es válida: cambia inscripcion["estado"] a "CANCELADA" y devuélvela.
-    raise NotImplementedError("Completa el Paso 3")
+    # Única transición válida: ACTIVA --> CANCELADA
+    if (inscripcion["estado"] != EstadoInscripcion.ACTIVA.value
+            or cuerpo.estado != EstadoInscripcion.CANCELADA):
+        raise HTTPException(status_code=409, detail="TRANSICION_INVALIDA")
+
+    inscripcion["estado"] = EstadoInscripcion.CANCELADA.value
+    return inscripcion
