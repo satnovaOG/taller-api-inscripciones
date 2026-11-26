@@ -1,7 +1,7 @@
 # Diseño de la API de Inscripciones
 
 **Curso:** Ingeniería de Software II — Universidad Nacional de Colombia (2026-2)  
-**Grupo:** Santiago Montealegre Romero
+**Grupo:** Santiago Montealegre Romero, Jose Leonardo Pinilla
 
 ---
 
