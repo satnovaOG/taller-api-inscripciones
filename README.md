@@ -4,7 +4,7 @@ API REST desarrollada con **FastAPI** para la gestión de inscripciones académi
 
 > **Curso:** Ingeniería de Software II — Universidad Nacional de Colombia (2026-2)  
 > **Docente:** Liliana Marcela Olarte Mesa  
-> **Autor:** Santiago Montealegre Romero
+> **Autores:** Santiago Montealegre Romero, Jose Leonardo Pinilla
 
 ---
 
